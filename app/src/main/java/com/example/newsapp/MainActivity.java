@@ -2,6 +2,7 @@ package com.example.newsapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,11 @@ public class MainActivity extends AppCompatActivity {
         features.add(new Feature("Sports", "Warriors Coming to Oakland", "October 1, 2017", 21));
         features.add(new Feature("Shopping", "Black Friday Deals Happening Right Now", "April 7, 2017", 45));
 
+        ListView featuresListView = (ListView) findViewById(R.id.list);
 
+        FeatureAdapter adapter = new FeatureAdapter(this, features);
+
+        featuresListView.setAdapter(adapter);
 
     }
 }
