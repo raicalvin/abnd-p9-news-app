@@ -2,7 +2,9 @@ package com.example.newsapp;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -29,10 +31,31 @@ public final class QueryUtils {
         // If there is an error with JSON format, exception thrown
         // Catch exception, print error to logs
         try {
+
             // Parse the JSON response and build a list of Feature objects
+            JSONObject root = new JSONObject(SAMPLE_JSON_RESPONSE);
+            JSONObject response = root.getJSONObject("response");
+            JSONArray results = response.getJSONArray("results");
+
+            JSONObject currentResultObj;
+            String currentDateString;
+            String currentTitleString;
+            String currentCategoryString;
+            for (int i = 0; i < results.length(); i++) {
+                currentResultObj = results.getJSONObject(i);
+                currentDateString = currentResultObj.getString("webPublicationDate");
+                currentTitleString = currentResultObj.getString("webTitle");
+                currentCategoryString = currentResultObj.getString("sectionName");
+                Log.i("QueryUtils", "extractFeatures: " + currentDateString + currentTitleString + currentCategoryString);
+            }
+
+            // Log.i("QueryUtils", "results is: " + results);
+
         } catch (JSONException e) {
+
             // If error thrown while executing above, catch exception here
             Log.e("QueryUtils", "Problem parsing the feature JSON results", e);
+
         }
 
         // Return a list of features

@@ -27,5 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         featuresListView.setAdapter(adapter);
 
+        // Use this for testing the JSON parsing
+        QueryUtils.extractFeatures();
+
     }
 }
