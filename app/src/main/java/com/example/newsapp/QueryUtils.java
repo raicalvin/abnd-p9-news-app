@@ -41,12 +41,18 @@ public final class QueryUtils {
             String currentDateString;
             String currentTitleString;
             String currentCategoryString;
+
             for (int i = 0; i < results.length(); i++) {
                 currentResultObj = results.getJSONObject(i);
                 currentDateString = currentResultObj.getString("webPublicationDate");
                 currentTitleString = currentResultObj.getString("webTitle");
                 currentCategoryString = currentResultObj.getString("sectionName");
-                Log.i("QueryUtils", "extractFeatures: " + currentDateString + currentTitleString + currentCategoryString);
+                features.add(new Feature(
+                        currentCategoryString,
+                        currentTitleString,
+                        formatDate(currentDateString),
+                        1));
+                Log.i("QueryUtils", "extractFeatures: " + features.get(i).getNewsDate());
             }
 
             // Log.i("QueryUtils", "results is: " + results);
@@ -60,6 +66,16 @@ public final class QueryUtils {
 
         // Return a list of features
         return features;
+    }
+
+    /**
+     * This function takes in the full date and only returns the "YYYY-MM-DD" format
+     * @param incomingDate Unformatted date
+     * @return formatted date in "YYYY-MM-DD"
+     */
+    private static String formatDate(String incomingDate) {
+        String formattedDate = incomingDate.substring(0, 10);
+        return formattedDate;
     }
 
 }
