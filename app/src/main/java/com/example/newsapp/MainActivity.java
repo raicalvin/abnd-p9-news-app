@@ -1,5 +1,6 @@
 package com.example.newsapp;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -7,6 +8,9 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    /** Request URL from Guardian News API */
+    private static final String GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?api-key=27c64b7b-c582-4358-b169-12ce8c793e41";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,4 +29,5 @@ public class MainActivity extends AppCompatActivity {
         QueryUtils.extractFeatures();
 
     }
+
 }
