@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +29,19 @@ public class MainActivity extends AppCompatActivity {
         // Use this for testing the JSON parsing
         QueryUtils.extractFeatures();
 
+    }
+
+    private class FeatureAsyncTask extends AsyncTask<String, Void, List<Feature>> {
+
+        @Override
+        protected List<Feature> doInBackground(String... strings) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<Feature> data) {
+
+        }
     }
 
 }
