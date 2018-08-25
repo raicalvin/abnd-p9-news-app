@@ -14,6 +14,9 @@ public class Feature {
     /** Resource ID for the feature item thumbnail */
     private int newsImageResourceID;
 
+    /** String URL for the news article website article */
+    private String newsWebsiteUrl;
+
     /**
      * Constructs a new {@link Feature} object.
      *
@@ -22,11 +25,12 @@ public class Feature {
      * @param date is the date of publication for the news item
      * @param imageID is the image ID for the news item thumbnail
      */
-    public Feature(String category, String title, String date, int imageID) {
+    public Feature(String category, String title, String date, int imageID, String webURL) {
         newsCategory = category;
         newsTitle = title;
         newsDate = date;
         newsImageResourceID = imageID;
+        newsWebsiteUrl = webURL;
     }
 
     /**
@@ -55,6 +59,10 @@ public class Feature {
      */
     public int getNewsImageResourceID() {
         return newsImageResourceID;
+    }
+
+    public String getUrl() {
+        return newsWebsiteUrl;
     }
 
 }

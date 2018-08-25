@@ -26,9 +26,6 @@ public final class QueryUtils {
 
     public static final String LOG_TAG = "QueryUtils";
 
-    /** Request URL from Guardian News API */
-    private static final String GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?api-key=27c64b7b-c582-4358-b169-12ce8c793e41";
-
     /**
      * This QueryUtils class is only meant to hold static variables and methods that can be accessed directly from the class name. A QueryUtils object should NOT be created.
      */
@@ -58,17 +55,20 @@ public final class QueryUtils {
             String currentDateString;
             String currentTitleString;
             String currentCategoryString;
+            String currentWebsiteURLString;
 
             for (int i = 0; i < results.length(); i++) {
                 currentResultObj = results.getJSONObject(i);
                 currentDateString = currentResultObj.getString("webPublicationDate");
                 currentTitleString = currentResultObj.getString("webTitle");
                 currentCategoryString = currentResultObj.getString("sectionName");
+                currentWebsiteURLString = currentResultObj.getString("webUrl");
                 features.add(new Feature(
                         currentCategoryString,
                         currentTitleString,
                         formatDate(currentDateString),
-                        1));
+                        1,
+                        currentWebsiteURLString));
                 Log.i("QueryUtils", "extractFeatures: " + features.get(i).getNewsDate());
             }
 
@@ -168,6 +168,28 @@ public final class QueryUtils {
             }
         }
         return output.toString();
+    }
+
+    /**
+     * Query the Guardian dataset and return a list of {@link Feature} objects.
+     */
+    public static List<Feature> fetchNewsFeatures(String requestUrl) {
+        // Create URL object
+        URL url = createUrl(requestUrl);
+
+        // Perform HTTP request to the URL and receive a JSON response back
+        String jsonResponse = null;
+        try {
+            jsonResponse = makeHttpRequest(url);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+        }
+
+        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
+        List<Feature> features = extractFeaturesFromJson(jsonResponse);
+
+        // Return the list of {@link Earthquake}s
+        return features;
     }
 
 }
