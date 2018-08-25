@@ -10,9 +10,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    /** Request URL from Guardian News API */
-    private static final String GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?api-key=27c64b7b-c582-4358-b169-12ce8c793e41";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

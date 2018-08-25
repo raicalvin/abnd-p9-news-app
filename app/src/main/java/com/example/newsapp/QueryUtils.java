@@ -1,12 +1,22 @@
 package com.example.newsapp;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * These methods are Helper methods that help request and receive Guardian news stories.
@@ -14,18 +24,25 @@ import java.util.ArrayList;
 
 public final class QueryUtils {
 
-    /** Sample JSON response for a Guardian query */
-    private static final String SAMPLE_JSON_RESPONSE = "{\"response\":{\"status\":\"ok\",\"userTier\":\"developer\",\"total\":2053235,\"startIndex\":1,\"pageSize\":10,\"currentPage\":1,\"pages\":205324,\"orderBy\":\"newest\",\"results\":[{\"id\":\"commentisfree/2018/aug/08/the-guardian-view-on-shahidul-alam-bangladesh-should-let-him-go\",\"type\":\"article\",\"sectionId\":\"commentisfree\",\"sectionName\":\"Opinion\",\"webPublicationDate\":\"2018-08-08T17:16:24Z\",\"webTitle\":\"The Guardian view on Shahidul Alam: Bangladesh should let him go | Editorial\",\"webUrl\":\"https://www.theguardian.com/commentisfree/2018/aug/08/the-guardian-view-on-shahidul-alam-bangladesh-should-let-him-go\",\"apiUrl\":\"https://content.guardianapis.com/commentisfree/2018/aug/08/the-guardian-view-on-shahidul-alam-bangladesh-should-let-him-go\",\"isHosted\":false,\"pillarId\":\"pillar/opinion\",\"pillarName\":\"Opinion\"},{\"id\":\"business/2018/aug/08/homebase-set-to-announce-closure-of-up-to-80-stores\",\"type\":\"article\",\"sectionId\":\"business\",\"sectionName\":\"Business\",\"webPublicationDate\":\"2018-08-08T17:10:29Z\",\"webTitle\":\"Homebase set to announce closure of up to 80 stores\",\"webUrl\":\"https://www.theguardian.com/business/2018/aug/08/homebase-set-to-announce-closure-of-up-to-80-stores\",\"apiUrl\":\"https://content.guardianapis.com/business/2018/aug/08/homebase-set-to-announce-closure-of-up-to-80-stores\",\"isHosted\":false,\"pillarId\":\"pillar/news\",\"pillarName\":\"News\"},{\"id\":\"world/2018/aug/08/what-muslim-women-ought-not-to-wear-isnt-a-matter-for-boris-johnson\",\"type\":\"article\",\"sectionId\":\"world\",\"sectionName\":\"World news\",\"webPublicationDate\":\"2018-08-08T17:08:13Z\",\"webTitle\":\"What Muslim women ought not to wear isn’t a matter for Boris Johnson | Letters\",\"webUrl\":\"https://www.theguardian.com/world/2018/aug/08/what-muslim-women-ought-not-to-wear-isnt-a-matter-for-boris-johnson\",\"apiUrl\":\"https://content.guardianapis.com/world/2018/aug/08/what-muslim-women-ought-not-to-wear-isnt-a-matter-for-boris-johnson\",\"isHosted\":false,\"pillarId\":\"pillar/news\",\"pillarName\":\"News\"},{\"id\":\"environment/2018/aug/08/with-the-world-on-fire-we-must-act-now-to-tackle-climate-change\",\"type\":\"article\",\"sectionId\":\"environment\",\"sectionName\":\"Environment\",\"webPublicationDate\":\"2018-08-08T17:08:02Z\",\"webTitle\":\"With the world on fire, we must act now to tackle climate change | Letters\",\"webUrl\":\"https://www.theguardian.com/environment/2018/aug/08/with-the-world-on-fire-we-must-act-now-to-tackle-climate-change\",\"apiUrl\":\"https://content.guardianapis.com/environment/2018/aug/08/with-the-world-on-fire-we-must-act-now-to-tackle-climate-change\",\"isHosted\":false,\"pillarId\":\"pillar/news\",\"pillarName\":\"News\"},{\"id\":\"world/2018/aug/08/psychotherapy-and-issues-of-sexuality\",\"type\":\"article\",\"sectionId\":\"world\",\"sectionName\":\"World news\",\"webPublicationDate\":\"2018-08-08T17:07:18Z\",\"webTitle\":\"Psychotherapy and issues of sexuality | Letter\",\"webUrl\":\"https://www.theguardian.com/world/2018/aug/08/psychotherapy-and-issues-of-sexuality\",\"apiUrl\":\"https://content.guardianapis.com/world/2018/aug/08/psychotherapy-and-issues-of-sexuality\",\"isHosted\":false,\"pillarId\":\"pillar/news\",\"pillarName\":\"News\"},{\"id\":\"business/2018/aug/08/giant-shipload-of-soybeans-drifts-off-china-victim-of-trade-war-with-us\",\"type\":\"article\",\"sectionId\":\"business\",\"sectionName\":\"Business\",\"webPublicationDate\":\"2018-08-08T17:03:39Z\",\"webTitle\":\"Giant shipload of soybeans drifts off China, victim of trade war with US\",\"webUrl\":\"https://www.theguardian.com/business/2018/aug/08/giant-shipload-of-soybeans-drifts-off-china-victim-of-trade-war-with-us\",\"apiUrl\":\"https://content.guardianapis.com/business/2018/aug/08/giant-shipload-of-soybeans-drifts-off-china-victim-of-trade-war-with-us\",\"isHosted\":false,\"pillarId\":\"pillar/news\",\"pillarName\":\"News\"},{\"id\":\"environment/2018/aug/08/reflecting-suns-rays-would-cause-crops-to-fail-scientists-warn\",\"type\":\"article\",\"sectionId\":\"environment\",\"sectionName\":\"Environment\",\"webPublicationDate\":\"2018-08-08T17:00:02Z\",\"webTitle\":\"Reflecting sun's rays would cause crops to fail, scientists warn\",\"webUrl\":\"https://www.theguardian.com/environment/2018/aug/08/reflecting-suns-rays-would-cause-crops-to-fail-scientists-warn\",\"apiUrl\":\"https://content.guardianapis.com/environment/2018/aug/08/reflecting-suns-rays-would-cause-crops-to-fail-scientists-warn\",\"isHosted\":false,\"pillarId\":\"pillar/news\",\"pillarName\":\"News\"},{\"id\":\"football/2018/aug/08/mauricio-pochettino-criticise-shorter-transfer-window-tottenham\",\"type\":\"article\",\"sectionId\":\"football\",\"sectionName\":\"Football\",\"webPublicationDate\":\"2018-08-08T16:59:01Z\",\"webTitle\":\"Why Mauricio Pochettino is wrong to criticise shorter transfer window | Paul MacInnes\",\"webUrl\":\"https://www.theguardian.com/football/2018/aug/08/mauricio-pochettino-criticise-shorter-transfer-window-tottenham\",\"apiUrl\":\"https://content.guardianapis.com/football/2018/aug/08/mauricio-pochettino-criticise-shorter-transfer-window-tottenham\",\"isHosted\":false,\"pillarId\":\"pillar/sport\",\"pillarName\":\"Sport\"},{\"id\":\"sport/blog/2018/aug/08/counties-need-to-revolt-the-hundred-ecb\",\"type\":\"article\",\"sectionId\":\"sport\",\"sectionName\":\"Sport\",\"webPublicationDate\":\"2018-08-08T16:57:05Z\",\"webTitle\":\"Counties should revolt against The Hundred and reverse the ECB coup | Matthew Engel\",\"webUrl\":\"https://www.theguardian.com/sport/blog/2018/aug/08/counties-need-to-revolt-the-hundred-ecb\",\"apiUrl\":\"https://content.guardianapis.com/sport/blog/2018/aug/08/counties-need-to-revolt-the-hundred-ecb\",\"isHosted\":false,\"pillarId\":\"pillar/sport\",\"pillarName\":\"Sport\"},{\"id\":\"commentisfree/2018/aug/08/austerity-kills-life-expectancy-standstill-britain\",\"type\":\"article\",\"sectionId\":\"commentisfree\",\"sectionName\":\"Opinion\",\"webPublicationDate\":\"2018-08-08T16:52:39Z\",\"webTitle\":\"Austerity kills: this week’s figures show its devastating toll | Owen Jones\",\"webUrl\":\"https://www.theguardian.com/commentisfree/2018/aug/08/austerity-kills-life-expectancy-standstill-britain\",\"apiUrl\":\"https://content.guardianapis.com/commentisfree/2018/aug/08/austerity-kills-life-expectancy-standstill-britain\",\"isHosted\":false,\"pillarId\":\"pillar/opinion\",\"pillarName\":\"Opinion\"}]}}";
+    public static final String LOG_TAG = "QueryUtils";
+
+    /** Request URL from Guardian News API */
+    private static final String GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?api-key=27c64b7b-c582-4358-b169-12ce8c793e41";
 
     /**
      * This QueryUtils class is only meant to hold static variables and methods that can be accessed directly from the class name. A QueryUtils object should NOT be created.
      */
     private QueryUtils() {}
 
-    public static ArrayList<Feature> extractFeatures() {
+    public static List<Feature> extractFeaturesFromJson(String newsJSON) {
+
+        // If the JSON string is empty or null, then return early.
+        if (TextUtils.isEmpty(newsJSON)) {
+            return null;
+        }
 
         // Empty Features ArrayList to add features to
-        ArrayList<Feature> features = new ArrayList<>();
+        List<Feature> features = new ArrayList<>();
 
         // Parse the JSON response
         // If there is an error with JSON format, exception thrown
@@ -33,7 +50,7 @@ public final class QueryUtils {
         try {
 
             // Parse the JSON response and build a list of Feature objects
-            JSONObject root = new JSONObject(SAMPLE_JSON_RESPONSE);
+            JSONObject root = new JSONObject(newsJSON);
             JSONObject response = root.getJSONObject("response");
             JSONArray results = response.getJSONArray("results");
 
@@ -76,6 +93,81 @@ public final class QueryUtils {
     private static String formatDate(String incomingDate) {
         String formattedDate = incomingDate.substring(0, 10);
         return formattedDate;
+    }
+
+    /**
+     * Returns new URL object from the given string URL.
+     */
+    private static URL createUrl(String stringUrl) {
+        URL url = null;
+        try {
+            url = new URL(stringUrl);
+        } catch (MalformedURLException e) {
+            Log.e(LOG_TAG, "Problem building the URL ", e);
+        }
+        return url;
+    }
+
+    /**
+     * Make an HTTP request to the given URL and return a String as the response.
+     */
+    private static String makeHttpRequest(URL url) throws IOException {
+        String jsonResponse = "";
+
+        // If the URL is null, then return early.
+        if (url == null) {
+            return jsonResponse;
+        }
+
+        HttpURLConnection urlConnection = null;
+        InputStream inputStream = null;
+        try {
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setReadTimeout(10000 /* milliseconds */);
+            urlConnection.setConnectTimeout(15000 /* milliseconds */);
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            // If the request was successful (response code 200),
+            // then read the input stream and parse the response.
+            if (urlConnection.getResponseCode() == 200) {
+                inputStream = urlConnection.getInputStream();
+                jsonResponse = readFromStream(inputStream);
+            } else {
+                Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
+            }
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem retrieving the Guardian News JSON results.", e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (inputStream != null) {
+                // Closing the input stream could throw an IOException, which is why
+                // the makeHttpRequest(URL url) method signature specifies than an IOException
+                // could be thrown.
+                inputStream.close();
+            }
+        }
+        return jsonResponse;
+    }
+
+    /**
+     * Convert the {@link InputStream} into a String which contains the
+     * whole JSON response from the server.
+     */
+    private static String readFromStream(InputStream inputStream) throws IOException {
+        StringBuilder output = new StringBuilder();
+        if (inputStream != null) {
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String line = reader.readLine();
+            while (line != null) {
+                output.append(line);
+                line = reader.readLine();
+            }
+        }
+        return output.toString();
     }
 
 }
