@@ -1,6 +1,8 @@
 package com.example.newsapp;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +14,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Feature>> {
 
     private FeatureAdapter mAdapter;
 
@@ -80,5 +82,21 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    @Override
+    public Loader<List<Feature>> onCreateLoader(int i, Bundle bundle) {
+        // TODO: Create a new laoder for the given URL
+    }
+
+    @Override
+    public void onLoadFInished(Loader<List<Feature>> loader, List<Feature> features) {
+        // TODO: Update the UI with the result
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Feature>> loader) {
+        // TODO: Loader reset, clear out existing data
+    }
+
 
 }
