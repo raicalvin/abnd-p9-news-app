@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +27,17 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
      */
     private static final int FEATURE_LOADER_ID = 1;
 
+    private TextView mEmptyStateTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ListView featuresListView = (ListView) findViewById(R.id.list);
+
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+        featuresListView.setEmptyView(mEmptyStateTextView);
 
         // Create a new adapter that takes an empty list of features as input
         mAdapter = new FeatureAdapter(this, new ArrayList<Feature>());
