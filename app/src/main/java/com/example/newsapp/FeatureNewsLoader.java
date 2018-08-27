@@ -7,9 +7,15 @@ import java.util.List;
 
 public class FeatureNewsLoader extends AsyncTaskLoader<List<Feature>> {
 
+    /** Tag log for console messages output */
+    private static final String LOG_TAG = FeatureNewsLoader.class.getName();
+
+    /** Variable to hold Query URL */
+    private String mUrl;
+
     public FeatureNewsLoader(Context context, String url) {
         super(context);
-        // TODO: Finish implementing constructor
+        mUrl = url;
     }
 
     @Override
@@ -19,6 +25,7 @@ public class FeatureNewsLoader extends AsyncTaskLoader<List<Feature>> {
 
     @Override
     public List<Feature> loadInBackground() {
-        // TODO: Implement this method
+        List<Feature> features = QueryUtils.fetchNewsFeatures(mUrl);
+        return features;
     }
 }
