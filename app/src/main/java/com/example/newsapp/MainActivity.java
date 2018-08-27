@@ -1,10 +1,10 @@
 package com.example.newsapp;
 
 import android.app.LoaderManager;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Intent;
 import android.content.Loader;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,12 +14,17 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Feature>> {
+public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<Feature>> {
 
     private FeatureAdapter mAdapter;
 
     /** Request URL from Guardian News API */
     private static final String GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?api-key=27c64b7b-c582-4358-b169-12ce8c793e41";
+
+    /**
+     * Constant value for the Feature loader ID
+     */
+    private static final int FEATURE_LOADER_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,56 +52,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        // Start the AsyncTask to fetch the earthquake data
-        FeatureAsyncTask task = new FeatureAsyncTask();
-        task.execute(GUARDIAN_REQUEST_URL);
+        // Reference to LoaderManager to interact with Loaders
+        LoaderManager loaderManager = getLoaderManager();
 
-    }
+        // Initialize loader, pass in ID, and pass in null for bundle.
+        // Pass in this activity
+        loaderManager.initLoader(FEATURE_LOADER_ID, null, this);
 
-    private class FeatureAsyncTask extends AsyncTask<String, Void, List<Feature>> {
-
-        @Override
-        protected List<Feature> doInBackground(String... urls) {
-
-            if (urls.length < 1 || urls[0] == null) {
-                return null;
-            }
-
-            List<Feature> result = QueryUtils.fetchNewsFeatures(urls[0]);
-
-            return result;
-
-        }
-
-        @Override
-        protected void onPostExecute(List<Feature> data) {
-
-            // Clear the adapter of previous news data
-            mAdapter.clear();
-
-            // If there is a valid list of {@link Feature}s, then add them to the adapter's
-            // data set. This will trigger the ListView to update.
-            if (data != null && !data.isEmpty()) {
-                mAdapter.addAll(data);
-            }
-
-        }
     }
 
     @Override
     public Loader<List<Feature>> onCreateLoader(int i, Bundle bundle) {
-        // TODO: Create a new laoder for the given URL
+        // Create a new loader for URL
+        return new FeatureNewsLoader(this, GUARDIAN_REQUEST_URL);
     }
 
     @Override
-    public void onLoadFInished(Loader<List<Feature>> loader, List<Feature> features) {
-        // TODO: Update the UI with the result
+    public void onLoadFinished(Loader<List<Feature>> loader, List<Feature> features) {
+        // Clear the adapter of previous news data
+        mAdapter.clear();
+        if (features != null && !features.isEmpty()) {
+            mAdapter.addAll(features);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<List<Feature>> loader) {
-        // TODO: Loader reset, clear out existing data
+        mAdapter.clear();
     }
-
 
 }
