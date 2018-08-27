@@ -4,6 +4,8 @@ import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,12 +60,23 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             }
         });
 
-        // Reference to LoaderManager to interact with Loaders
-        LoaderManager loaderManager = getLoaderManager();
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        // Initialize loader, pass in ID, and pass in null for bundle.
-        // Pass in this activity
-        loaderManager.initLoader(FEATURE_LOADER_ID, null, this);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            // Reference to LoaderManager to interact with Loaders
+            LoaderManager loaderManager = getLoaderManager();
+
+            // Initialize loader, pass in ID, and pass in null for bundle.
+            // Pass in this activity
+            loaderManager.initLoader(FEATURE_LOADER_ID, null, this);
+        } else {
+            View loadingIndicator = findViewById(R.id.loading_indicator);
+            loadingIndicator.setVisibility(View.GONE);
+            mEmptyStateTextView.setText(R.string.no_internet_connection);
+        }
+
 
     }
 
@@ -75,6 +88,11 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     @Override
     public void onLoadFinished(Loader<List<Feature>> loader, List<Feature> features) {
+        View loadingIndicator = findViewById(R.id.loading_indicator);
+        loadingIndicator.setVisibility(View.GONE);
+
+        mEmptyStateTextView.setText(R.string.no_news_story);
+
         // Clear the adapter of previous news data
         mAdapter.clear();
         if (features != null && !features.isEmpty()) {
