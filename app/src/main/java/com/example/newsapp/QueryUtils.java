@@ -57,12 +57,21 @@ public final class QueryUtils {
             String currentCategoryString;
             String currentWebsiteURLString;
 
+            JSONArray currentTagsArray;
+            JSONObject currentTagsObject;
+            String currentWebTitleString;
+
+
             for (int i = 0; i < results.length(); i++) {
                 currentResultObj = results.getJSONObject(i);
                 currentDateString = currentResultObj.getString("webPublicationDate");
                 currentTitleString = currentResultObj.getString("webTitle");
                 currentCategoryString = currentResultObj.getString("sectionName");
                 currentWebsiteURLString = currentResultObj.getString("webUrl");
+                currentTagsArray = currentResultObj.getJSONArray("tags");
+                currentTagsObject = currentTagsArray.getJSONObject(0);
+                currentWebTitleString = currentTagsObject.getString("webTitle");
+                Log.i(LOG_TAG, "extractFeaturesFromJson: " + currentWebTitleString);
                 features.add(new Feature(
                         currentCategoryString,
                         currentTitleString,

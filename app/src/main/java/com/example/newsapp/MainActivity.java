@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     private FeatureAdapter mAdapter;
 
     /** Request URL from Guardian News API */
-    private static final String GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?api-key=27c64b7b-c582-4358-b169-12ce8c793e41";
+    private static final String GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?api-key=27c64b7b-c582-4358-b169-12ce8c793e41&show-tags=contributor";
 
     /**
      * Constant value for the Feature loader ID
