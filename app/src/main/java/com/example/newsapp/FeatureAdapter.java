@@ -44,10 +44,12 @@ public class FeatureAdapter extends ArrayAdapter<Feature> {
         TextView categoryTV = listItemView.findViewById(R.id.tv_news_category);
         TextView titleTV = listItemView.findViewById(R.id.tv_news_title);
         TextView dateTV = listItemView.findViewById(R.id.tv_news_date);
+        TextView webTitleTV = listItemView.findViewById(R.id.tv_author);
 
         categoryTV.setText(currentFeature.getNewsCategory());
         titleTV.setText(currentFeature.getNewsTitle());
         dateTV.setText(currentFeature.getNewsDate());
+        webTitleTV.setText(currentFeature.getWebTitle());
 
         return listItemView;
 

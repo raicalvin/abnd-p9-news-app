@@ -72,12 +72,15 @@ public final class QueryUtils {
                 currentTagsObject = currentTagsArray.getJSONObject(0);
                 currentWebTitleString = currentTagsObject.getString("webTitle");
                 Log.i(LOG_TAG, "extractFeaturesFromJson: " + currentWebTitleString);
+
                 features.add(new Feature(
                         currentCategoryString,
                         currentTitleString,
                         formatDate(currentDateString),
                         1,
-                        currentWebsiteURLString));
+                        currentWebsiteURLString,
+                        currentWebTitleString));
+
                 Log.i("QueryUtils", "extractFeatures: " + features.get(i).getNewsDate());
             }
 
