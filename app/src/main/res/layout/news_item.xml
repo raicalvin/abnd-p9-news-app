@@ -27,16 +27,26 @@
         android:id="@+id/tv_news_title"
         tools:text="SpongeBob finds out he isn't a sponge"
         android:textSize="24sp"
+        android:textColor="#1F1F1F"
         android:textStyle="bold"
         android:layout_marginBottom="6dp"
         android:layout_marginTop="6dp"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_author"
+        tools:text="Patrick Star"
+        android:textColor="#5B4BA0"
+        android:textSize="18sp"
+        android:layout_marginBottom="6dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv_news_date"
         tools:text="March 31, 9999"
-        android:textSize="12sp"/>
+        android:textSize="12sp"
+        android:textColor="#1F1F1F" />
 
 </LinearLayout>
