@@ -4,11 +4,14 @@ import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +27,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     private FeatureAdapter mAdapter;
 
     /** Request URL from Guardian News API */
-    private static final String GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?api-key=27c64b7b-c582-4358-b169-12ce8c793e41&show-tags=contributor";
+    // private static final String GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search?api-key=27c64b7b-c582-4358-b169-12ce8c793e41&show-tags=contributor";
+    private static final String GUARDIAN_REQUEST_URL = "https://content.guardianapis.com/search";
 
     /**
      * Constant value for the Feature loader ID
@@ -84,8 +88,23 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     @Override
     public Loader<List<Feature>> onCreateLoader(int i, Bundle bundle) {
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String minStories = sharedPrefs.getString(getString(R.string.settings_min_page_size_key), getString(R.string.settings_min_page_size_default));
+
+        Uri baseUri = Uri.parse(GUARDIAN_REQUEST_URL);
+
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        uriBuilder.appendQueryParameter("api-key", "27c64b7b-c582-4358-b169-12ce8c793e41");
+        uriBuilder.appendQueryParameter("show-tags", "contributor");
+        uriBuilder.appendQueryParameter("page-size", minStories);
+
+        Log.i("SUUUUUUPPPP", "onCreateLoader: New URL" + uriBuilder.toString());
+
         // Create a new loader for URL
-        return new FeatureNewsLoader(this, GUARDIAN_REQUEST_URL);
+        return new FeatureNewsLoader(this, uriBuilder.toString());
     }
 
     @Override
