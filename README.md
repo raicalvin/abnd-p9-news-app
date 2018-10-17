@@ -13,19 +13,15 @@ Networking and JSON parsing were to two primary concepts exercised in this appli
 - Connecting to an API
 - Creating and sending network requests to servers
 - Parsing retrieved JSON responses
-- Running the network requests and work on a seperate background thread
+- Running the network requests and work on a separate background thread
 - Using AsyncTask to manage and display the data
 - Creating and managing custom objects to store the required data
 
 ## User Interface
 
-Coming soon ...
+The UI houses a ListView containing the latest stories from the Guardian API. Each list item displays the news article title, date, category, and author(s). The user can select the number of stories they would like to see using the settings button.
 
 ![](https://github.com/raicalvin/pictures/blob/master/pix-abnd-p9-news-app/pic1.png) ![](https://github.com/raicalvin/pictures/blob/master/pix-abnd-p9-news-app/pic2.png) ![](https://github.com/raicalvin/pictures/blob/master/pix-abnd-p9-news-app/pic3.png)
-
-## User Experience
-
-Coming soon ...
 
 ## Getting Started
 
@@ -35,8 +31,10 @@ You should have Android Studio installed on your device prior to opening the pro
 
 ### Downloading
 
+You may download all files for this application by using the following command from your terminal:
+
 ```
-Example for download
+git clone https://github.com/raicalvin/abnd-p9-news-app.git
 ```
 
 ### Running
@@ -49,7 +47,7 @@ You should be able to run the project through an emulator in Android Studio or a
 
 ## Resources
 
-API resources from Guardian coming soon ...
+Guardian API - [Official Site](https://open-platform.theguardian.com/documentation/)
 
 ## Contact
 
