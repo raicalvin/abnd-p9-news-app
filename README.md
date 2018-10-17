@@ -4,7 +4,7 @@
 
 ### About
 
-This was a project for my Android Basics Grow with Google Developer Scholarship program from Udacity. We were tasked to create a news app that would send network requests to the Guardian servers to retrieve back the latest news stories and display it for the user. 
+This was a project for my Android Basics Grow with Google Developer Scholarship program from Udacity. We were tasked to create a news app that would send network requests to the Guardian servers to retrieve back the latest news stories and display it for the user.
 
 ### Concepts
 
@@ -21,7 +21,7 @@ Networking and JSON parsing were to two primary concepts exercised in this appli
 
 Coming soon ...
 
-![](http://placekitten.com/300/200) ![](http://placekitten.com/300/200)
+![](https://github.com/raicalvin/pictures/blob/master/pix-abnd-p9-news-app/pic1.png) ![](https://github.com/raicalvin/pictures/blob/master/pix-abnd-p9-news-app/pic2.png) ![](https://github.com/raicalvin/pictures/blob/master/pix-abnd-p9-news-app/pic3.png)
 
 ## User Experience
 
@@ -45,7 +45,7 @@ You should be able to run the project through an emulator in Android Studio or a
 
 ## Authors
 
-- Calvin S Rai - *Designer & Developer* - [GitHub](https://github.com/raicalvin)
+- Calvin S Rai - _Designer & Developer_ - [GitHub](https://github.com/raicalvin)
 
 ## Resources
 
